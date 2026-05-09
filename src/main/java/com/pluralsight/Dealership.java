@@ -38,4 +38,41 @@ public class Dealership {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    // methods
+    public void addVehicle(Vehicle vehicle) {
+        inventory.add(vehicle);
+    }
+
+    public void removeVehicle(Vehicle vehicle) {
+        inventory.remove(vehicle);
+    }
+
+    public ArrayList<Vehicle> getAllVehicles() {
+        return inventory;
+    }
+
+    public ArrayList<Vehicle> getVehiclesByPrice(double min, double max){
+        return null;
+    }
+
+    public ArrayList<Vehicle> getVehiclesByMakeModel(String make, String model){
+        return null;
+    }
+
+    public ArrayList<Vehicle> getVehiclesByYear(int min, int max){
+        return null;
+    }
+
+    public ArrayList<Vehicle> getVehiclesByColor(String color){
+        return null;
+    }
+
+    public ArrayList<Vehicle> getVehiclesByMileage(int min, int max){
+        return null;
+    }
+
+    public ArrayList<Vehicle> getVehiclesByType(String vehicleType){
+        return null;
+    }
 }
