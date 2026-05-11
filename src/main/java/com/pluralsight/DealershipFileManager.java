@@ -1,8 +1,6 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class DealershipFileManager {
@@ -44,7 +42,24 @@ public class DealershipFileManager {
         return dealership;
     }
 
-    public void saveDealership(Dealership dealership) {
+    public boolean saveDealership(Dealership dealership) {
+        try {
+            FileWriter fileWriter = new FileWriter("inventory.csv", false); // true means append the mode, so it won't overwrite
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(dealership.getName() + "|" + dealership.getAddress() + "|" + dealership.getPhone() + "\n");
 
+            ArrayList<Vehicle> vehicles = dealership.getAllVehicles();
+
+            for (Vehicle vehicle : vehicles) {
+                bufferedWriter.write(vehicle.toCsv());
+            }
+
+            bufferedWriter.close();
+            return true;
+        } catch (IOException e) {
+            System.out.println("Sorry, we could not read your transaction.");
+            return false;
+        }
     }
+
 }

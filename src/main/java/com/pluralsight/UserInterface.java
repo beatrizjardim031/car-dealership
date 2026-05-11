@@ -1,5 +1,6 @@
 package com.pluralsight;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -22,7 +23,7 @@ public class UserInterface {
 
         while (isRunning) {
             System.out.println("""
-                                 What do you want to do?
+                                        Menu:
                             1 - Find vehicles within a price range
                             2 - Find vehicles by make / model
                             3 - Find vehicles by year range
@@ -32,60 +33,154 @@ public class UserInterface {
                             7 - List ALL vehicles
                             8 - Add a vehicle
                             9 - Remove a vehicle
-                            99 - Quit
+                            0 - Quit
                             """);
-            int userChoice = input.nextInt();
+            System.out.print("What would you like to do? ");
+            int userChoice = 0;
+            try {
+                String userInput = input.nextLine();
+                userChoice = Integer.parseInt(userInput);
+            } catch (Exception e) {
+                System.out.println("\nSorry, invalid option. Please try again!\n");
+                continue; // skip to next loop iteration
+            }
 
             switch (userChoice) {
-                case 1 -> getByPriceRange();
-                case 2 -> getByMakeModel();
-                case 3 -> getByYearRange();
-                case 4 -> getByColor();
-                case 5 -> getByMileageRange();
-                case 6 -> getByType();
-                case 7 -> getAllVehicles();
-                case 8 -> addVehicle();
-                case 9 -> removeVehicle();
-                case 0 -> isRunning = false;
+                    case 1 -> getByPriceRange();
+                    case 2 -> getByMakeModel();
+                    case 3 -> getByYearRange();
+                    case 4 -> getByColor();
+                    case 5 -> getByMileageRange();
+                    case 6 -> getByType();
+                    case 7 -> getAllVehicles();
+                    case 8 -> addVehicle();
+                    case 9 -> removeVehicle();
+                    case 0 -> isRunning = false;
 
-                default -> System.out.println("We don't recognize this option. Please Try again");
-            }
+                    default -> System.out.println("We don't recognize this option. Please Try again");
+                }
         }
     }
 
     public void getByPriceRange() {
-        System.out.println("Getting by price range");
+        System.out.print("Type minimum price: ");
+        double userChoiceMin = Double.parseDouble(input.nextLine());
+        System.out.print("Type maximum price: ");
+        double userChoiceMax = Double.parseDouble(input.nextLine());
+        ArrayList<Vehicle> vehicles = dealership.getVehiclesByPrice(userChoiceMin, userChoiceMax);
+
+        displayVehicles(vehicles);
     }
 
     public void getByMakeModel() {
-        System.out.println("Getting by Make/Model");
+        System.out.print("Type make: ");
+        String userChoiceMake = input.nextLine();
+        System.out.print("Type model: ");
+        String userChoiceModel = input.nextLine();
+        ArrayList<Vehicle> vehicles = dealership.getVehiclesByMakeModel(userChoiceMake, userChoiceModel);
+
+        displayVehicles(vehicles);
     }
 
     public void getByYearRange() {
-        System.out.println("Getting by year range");
+        System.out.print("Type minimum year: ");
+        int userChoiceMin = Integer.parseInt(input.nextLine());
+        System.out.print("Type maximum year: ");
+        int userChoiceMax = Integer.parseInt(input.nextLine());
+        ArrayList<Vehicle> vehicles = dealership.getVehiclesByYear(userChoiceMin, userChoiceMax);
+
+        displayVehicles(vehicles);
     }
 
     public void getByColor() {
-        System.out.println("Getting by color");
+        System.out.print("Type make: ");
+        String userChoiceColor = input.nextLine();
+        ArrayList<Vehicle> vehicles = dealership.getVehiclesByColor(userChoiceColor);
+
+        displayVehicles(vehicles);
     }
 
     public void getByMileageRange() {
-        System.out.println("Getting by mileage range");
+        System.out.print("Type minimum mileage: ");
+        int userChoiceMin = Integer.parseInt(input.nextLine());
+        System.out.print("Type maximum mileage: ");
+        int userChoiceMax = Integer.parseInt(input.nextLine());
+        ArrayList<Vehicle> vehicles = dealership.getVehiclesByMileage(userChoiceMin, userChoiceMax);
+
+        displayVehicles(vehicles);
     }
 
     public void getByType() {
-        System.out.println("Getting by type");
+        System.out.print("Type vehicle Type: ");
+        String userChoiceType = input.nextLine();
+        ArrayList<Vehicle> vehicles = dealership.getVehiclesByType(userChoiceType);
+
+        displayVehicles(vehicles);
     }
 
     public void getAllVehicles() {
-        System.out.println("Getting all vehicles");
+       ArrayList<Vehicle> vehicles = dealership.getAllVehicles();
+        displayVehicles(vehicles);
     }
 
     public void addVehicle() {
-        System.out.println("Adding vehicle...");
+        System.out.print("Type Vin: ");
+        int vin = Integer.parseInt(input.nextLine());
+        System.out.println("Type year: ");
+        int year = Integer.parseInt(input.nextLine());
+        System.out.println("Type make: ");
+        String make = input.nextLine();
+        System.out.println("Type model: ");
+        String model = input.nextLine();
+        System.out.println("Vehicle type: ");
+        String vehicleType = input.nextLine();
+        System.out.println("Type color: ");
+        String color = input.nextLine();
+        System.out.print("Type mileage: ");
+        int mileage = Integer.parseInt(input.nextLine());
+        System.out.print("Type price: ");
+        double price = Double.parseDouble(input.nextLine());
+
+        Vehicle vehicle = new Vehicle(vin, year, make, model, vehicleType, color, mileage, price);
+        DealershipFileManager dealershipFileManager = new DealershipFileManager();
+
+        dealership.addVehicle(vehicle);
+        dealershipFileManager.saveDealership(dealership);
+
     }
 
     public void removeVehicle() {
-        System.out.println("Removing vehicle...");
+        System.out.print("Type Vin: ");
+        int vin = Integer.parseInt(input.nextLine());
+
+        ArrayList<Vehicle> result = dealership.getAllVehicles();
+        for (Vehicle vehicle : result) {
+            if(vehicle.getVin() == vin) {
+                dealership.removeVehicle(vehicle);
+            }
+        }
+        DealershipFileManager dealershipFileManager = new DealershipFileManager();
+
+        dealershipFileManager.saveDealership(dealership);
     }
+
+    //helper methods
+    public void displayVehicles(ArrayList<Vehicle> vehicles) {
+        for (Vehicle vehicle : vehicles) {
+            System.out.printf("%nVin: %d | Year: %d | Make: %s | Model: %s | Vehicle Type: %s | Color: %s | Odometer: %d | Price: %.2f%n",
+                    vehicle.getVin(),
+                    vehicle.getYear(),
+                    vehicle.getMake(),
+                    vehicle.getModel(),
+                    vehicle.getVehicleType(),
+                    vehicle.getColor(),
+                    vehicle.getOdometer(),
+                    vehicle.getPrice());
+
+        }
+    }
+//    public static String askForText(String prompt) {
+//        System.out.print(prompt);
+//        return input.nextLine();
+//    }
 }
