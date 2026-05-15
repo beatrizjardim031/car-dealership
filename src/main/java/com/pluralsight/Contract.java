@@ -5,14 +5,20 @@ public abstract class Contract {
     protected String dateOfContract;
     protected String customerName;
     protected String customerEmail;
-    protected String vehicleSold;
-    protected double totalPrice;
-    protected double monthlyPayment;
+    protected Vehicle vehicleSold;
 
-    public Contract(String dateOfContract, String customerName, String customerEmail, String vehicleSold) {
+    public Contract(String dateOfContract, String customerName, Vehicle vehicleSold, String customerEmail) {
         this.dateOfContract = dateOfContract;
         this.customerName = customerName;
+        this.vehicleSold = vehicleSold;
         this.customerEmail = customerEmail;
+    }
+
+    public Vehicle getVehicleSold() {
+        return vehicleSold;
+    }
+
+    public void setVehicleSold(Vehicle vehicleSold) {
         this.vehicleSold = vehicleSold;
     }
 
@@ -40,13 +46,6 @@ public abstract class Contract {
         this.customerEmail = customerEmail;
     }
 
-    public String getVehicleSold() {
-        return vehicleSold;
-    }
-
-    public void setVehicleSold(String vehicleSold) {
-        this.vehicleSold = vehicleSold;
-    }
 
     public abstract double getTotalPrice();
 
