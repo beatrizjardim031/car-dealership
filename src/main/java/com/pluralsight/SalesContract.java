@@ -11,17 +11,40 @@ public class SalesContract extends Contract {
         this.finance = finance;
     }
 
-    @Override
-    public double getTotalPrice() {
-//        vehicle price
-//        + sales tax (5% of vehicle price)
-//        + recording fee ($100)
-//        + processing fee ($295 if price < $10,000, $495 otherwise)
-        return 0;
+    public boolean isFinance() {
+        return finance;
     }
 
     @Override
     public double getMonthlyPayment() {
-        return 0;
+        double vehiclePrice = vehicleSold.getPrice();
+        double loan;
+        if (!finance) {
+            return 0;
+        }
+        if (vehiclePrice >= 10000) {
+            int loanLength = 48;
+            double monthlyRate = 4.25 / 100 / 12;
+            loan = getTotalPrice() * (monthlyRate / Math.pow(1 + monthlyRate, -loanLength));
+        } else {
+            int loanLength = 24;
+            double monthlyRate = 5.25 / 100 / 12;
+            loan = getTotalPrice() * (monthlyRate / Math.pow(1 + monthlyRate, -loanLength));
+        }
+        return loan;
     }
+
+    @Override
+    public double getTotalPrice() {
+        double vehiclePrice = vehicleSold.getPrice();
+        double tax = vehiclePrice * SALES_TAX;
+        double processingFee;
+        if (vehiclePrice <= 10000) {
+            processingFee = 295;
+        } else {
+            processingFee = 495;
+        }
+        return vehiclePrice + tax + RECORDING_FEE + processingFee;
+    }
+
 }
