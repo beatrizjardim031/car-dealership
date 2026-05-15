@@ -25,11 +25,11 @@ public class SalesContract extends Contract {
         if (vehiclePrice >= 10000) {
             int loanLength = 48;
             double monthlyRate = 4.25 / 100 / 12;
-            loan = getTotalPrice() * (monthlyRate / Math.pow(1 + monthlyRate, -loanLength));
+            loan = getTotalPrice() * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -loanLength)));
         } else {
             int loanLength = 24;
             double monthlyRate = 5.25 / 100 / 12;
-            loan = getTotalPrice() * (monthlyRate / Math.pow(1 + monthlyRate, -loanLength));
+            loan = getTotalPrice() * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -loanLength)));
         }
         return loan;
     }

@@ -46,7 +46,6 @@ public abstract class Contract {
         this.customerEmail = customerEmail;
     }
 
-
     public abstract double getTotalPrice();
 
     public abstract double getMonthlyPayment();
