@@ -26,6 +26,7 @@ public class SalesContract extends Contract {
             int loanLength = 48;
             double monthlyRate = 4.25 / 100 / 12;
             loan = getTotalPrice() * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -loanLength)));
+
         } else {
             int loanLength = 24;
             double monthlyRate = 5.25 / 100 / 12;
@@ -45,6 +46,21 @@ public class SalesContract extends Contract {
             processingFee = 495;
         }
         return vehiclePrice + tax + RECORDING_FEE + processingFee;
+    }
+
+    public String toCsv() {
+
+        return String.format("SALE: %s|%s|%s",
+                dateOfContract,
+                customerName,
+                customerEmail,
+                vehicleSold.toCsv(),
+                vehicleSold.getPrice(),
+
+
+
+                |YEAR|MAKE|MOD
+                EL|VEHICLE_TYPE|COLOR|ODOMETER|VEHICLE_PRICE|[contract-specificfields]|TOTAL_PRICE|MONTHLY_PAYMENT)
     }
 
 }

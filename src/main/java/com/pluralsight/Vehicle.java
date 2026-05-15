@@ -33,11 +33,9 @@ public class Vehicle {
         return make;
     }
 
-
     public String getModel() {
         return model;
     }
-
 
     public int getOdometer() {
         return odometer;
@@ -46,7 +44,6 @@ public class Vehicle {
     public String getVehicleType() {
         return vehicleType;
     }
-
 
     public String getColor() {
         return color;
