@@ -22,4 +22,40 @@ public class LeaseContract extends Contract {
 
         return vehiclePrice + (vehiclePrice * LEASE_FEE) + (vehiclePrice * ENDING_VALUE);
     }
+    public String toCsv() {
+// Headers: CONTRACT_TYPE|DATE|NAME|EMAIL|VIN|YEAR|MAKE|MODEL|TYPE|COLOR|MILES|PRICE|TAX|ENDING_VALUE|LEASE_FEE|TOTAL|FINANCE|MONTHLY
+        return String.format("LEASE|%s|%s|%s|%d|%d|%s|%s|%s|%s|%d|%.2f|%.2f|%.2f|%.2f|%.2f",
+                getDate(),
+                getCustomerName(),
+                getCustomerEmail(),
+                getVehicle().getVin(),
+                getVehicle().getYear(),
+                getVehicle().getMake(),
+                getVehicle().getModel(),
+                getVehicle().getVehicleType(),
+                getVehicle().getColor(),
+                getVehicle().getOdometer(),
+                getVehicle().getPrice(),
+                getEndingValue(),
+                getLeaseFee(),
+                getTotalPrice(),
+                getMonthlyPayment()
+        );
+    }
+
+    public double getEndingValue() {
+        return getVehicle().getPrice() * 0.50;
+    }
+
+    public double getLeaseFee() {
+        return getVehicle().getPrice() * 0.07;
+    }
+
+    public String getDate() {
+        return getDateOfContract();
+    }
+
+    public Vehicle getVehicle() {
+        return getVehicleSold();
+    }
 }
