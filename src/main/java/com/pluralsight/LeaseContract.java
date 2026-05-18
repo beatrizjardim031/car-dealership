@@ -23,36 +23,20 @@ public class LeaseContract extends Contract {
         return vehiclePrice + (vehiclePrice * LEASE_FEE) + (vehiclePrice * ENDING_VALUE);
     }
     public String toCsv() {
-// Headers: CONTRACT_TYPE|DATE|NAME|EMAIL|VIN|YEAR|MAKE|MODEL|TYPE|COLOR|MILES|PRICE|TAX|ENDING_VALUE|LEASE_FEE|TOTAL|FINANCE|MONTHLY
-        return String.format("LEASE|%s|%s|%s|%d|%d|%s|%s|%s|%s|%d|%.2f|%.2f|%.2f|%.2f|%.2f",
-                getDate(),
-                getCustomerName(),
-                getCustomerEmail(),
-                getVehicle().getVin(),
-                getVehicle().getYear(),
-                getVehicle().getMake(),
-                getVehicle().getModel(),
-                getVehicle().getVehicleType(),
-                getVehicle().getColor(),
-                getVehicle().getOdometer(),
-                getVehicle().getPrice(),
-                getEndingValue(),
+        // LEASE|date|name|email|vehicleData|endingValue|leaseFee|totalPrice|monthlyPayment
+        return String.format("LEASE|%s|%s|%s|%s|%.2f|%.2f|%.2f|%.2f",
+                dateOfContract,
+                customerName,
+                customerEmail,
+                vehicleSold.toCsv(),
+                vehicleSold.getPrice() * ENDING_VALUE,
                 getLeaseFee(),
                 getTotalPrice(),
-                getMonthlyPayment()
-        );
-    }
-
-    public double getEndingValue() {
-        return getVehicle().getPrice() * 0.50;
+                getMonthlyPayment());
     }
 
     public double getLeaseFee() {
-        return getVehicle().getPrice() * 0.07;
-    }
-
-    public String getDate() {
-        return getDateOfContract();
+        return vehicleSold.getPrice() * LEASE_FEE;
     }
 
     public Vehicle getVehicle() {

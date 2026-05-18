@@ -49,25 +49,18 @@ public class SalesContract extends Contract {
     }
 
     public String toCsv() {
- // Headers: CONTRACT_TYPE|DATE|NAME|EMAIL|VIN|YEAR|MAKE|MODEL|TYPE|COLOR|MILES|PRICE|TAX|REC_FEE|PRO_FEE|TOTAL|FINANCE|MONTHLY
-        return String.format("SALE|%s|%s|%s|%d|%d|%s|%s|%s|%s|%d|%.2f|%.2f|%.2f|%.2f|%.2f|%s|%.2f",
-                getDate(),
-                getCustomerName(),
-                getCustomerEmail(),
-                getVehicle().getVin(),
-                getVehicle().getYear(),
-                getVehicle().getMake(),
-                getVehicle().getModel(),
-                getVehicle().getVehicleType(),
-                getVehicle().getColor(),
-                getVehicle().getOdometer(),
-                getVehicle().getPrice(),
-                getVehicle().getPrice() * 0.05, 100.00,
+ // Headers: SALE|date|name|email|vehicleData|tax|recordingFee|processingFee|totalPrice|finance|monthlyPayment
+        return String.format("SALE|%s|%s|%s|%s|%.2f|%d|%.2f|%.2f|%s|%.2f",
+                dateOfContract,
+                customerName,
+                customerEmail,
+                vehicleSold.toCsv(),
+                vehicleSold.getPrice() * SALES_TAX,
+                RECORDING_FEE,
                 getProcessingFee(),
                 getTotalPrice(),
-                isFinance() ? "YES" : "NO",
-                getMonthlyPayment()
-        );
+                (finance ? "YES" : "NO"),
+                getMonthlyPayment());
     }
 
     private Object getDate() {
