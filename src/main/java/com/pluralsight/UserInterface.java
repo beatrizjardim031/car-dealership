@@ -33,10 +33,11 @@ public class UserInterface {
                             7 - List ALL vehicles
                             8 - Add a vehicle
                             9 - Remove a vehicle
+                            10 - Sell/Lease a vehicle
                             0 - Quit
                             """);
             System.out.print("What would you like to do? ");
-            int userChoice = 0;
+            int userChoice;
             try {
                 String userInput = input.nextLine();
                 userChoice = Integer.parseInt(userInput);
@@ -55,6 +56,7 @@ public class UserInterface {
                     case 7 -> getAllVehicles();
                     case 8 -> addVehicle();
                     case 9 -> removeVehicle();
+                    case 10 -> sellOrLeaseVehicle();
                     case 0 -> isRunning = false;
 
                     default -> System.out.println("We don't recognize this option. Please Try again");
@@ -161,6 +163,57 @@ public class UserInterface {
         }
         DealershipFileManager dealershipFileManager = new DealershipFileManager();
 
+        dealershipFileManager.saveDealership(dealership);
+    }
+
+    public void sellOrLeaseVehicle() {
+        //ask for VIN and find the vehicle
+        System.out.print("Enter VIN of vehicle: ");
+        int vin = Integer.parseInt(input.nextLine());
+
+        // find the vehicle in the dealership
+        Vehicle vehicle = null;
+        for (Vehicle vehicle1 : dealership.getAllVehicles()) {
+            if (vehicle1.getVin() == vin) {
+                vehicle = vehicle1;
+            }
+        }
+        //if vehicle not found
+        if (vehicle == null) {
+            System.out.println("Vehicle not found!");
+            return;
+        }
+        System.out.print("Enter your name: ");
+        String customerName = input.nextLine();
+
+        System.out.print("Enter your email: ");
+        String customerEmail = input.nextLine();
+
+        System.out.print("Enter date (YYYYMMDD): ");
+        String date = input.nextLine();
+
+        System.out.print("Would you like to (S)ell or (L)ease? ");
+        String choice = input.nextLine().toUpperCase();
+
+        Contract contract = null;
+
+        if (choice.equals("S")) {
+            System.out.print("Would you like to finance? (yes/no): ");
+            boolean finance = input.nextLine().equalsIgnoreCase("yes");
+            contract = new SalesContract(date, customerName, vehicle, customerEmail, finance);
+        } else if (choice.equals("L")) {
+            // check vehicle age first!
+            if (2026 - vehicle.getYear() > 3) {
+                System.out.println("Sorry, you can only lease vehicles 3 years old or newer!");
+                return;
+            }
+            contract = new LeaseContract(date, customerName, vehicle, customerEmail);
+        }
+        ContractDataManager contractDataManager = new ContractDataManager();
+        contractDataManager.saveContract(contract);
+
+        dealership.removeVehicle(vehicle);
+        DealershipFileManager dealershipFileManager = new DealershipFileManager();
         dealershipFileManager.saveDealership(dealership);
     }
 
